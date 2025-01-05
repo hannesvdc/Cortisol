@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="12dp"
+    android:background="#f9f9f9"
+    android:orientation="vertical"
+    android:padding="10dp"
+    android:gravity="bottom|center">
+
+    <Button
+        android:id="@+id/wake_button"
+        android:layout_width="140dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="center_horizontal|center"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="80dp"
+        android:background="#C01831"
+        android:onClick="meonFb"
+        android:text="I'm Awake"
+        android:textColor="#ffffff" />
+
+</LinearLayout>
