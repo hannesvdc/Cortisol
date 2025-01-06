@@ -6,19 +6,51 @@
     android:background="#f9f9f9"
     android:orientation="vertical"
     android:padding="10dp"
-    android:gravity="bottom|center">
+    android:gravity="top"
+    android:layout_gravity="center_horizontal">
 
+    <!-- First TextView -->
+    <TextView
+        android:id="@+id/text_view_4_hour"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="140dp"
+        android:text="4-Hour Alarm"
+        android:textColor="#008000"
+        android:textSize="40dp"
+        android:textStyle="bold"
+        android:gravity="center"/>
+
+    <!-- Add space between TextViews -->
+    <TextView
+        android:id="@+id/text_view_8_hour"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="50dp"
+        android:text="8-Hour Alarm"
+        android:textColor="#008000"
+        android:textSize="40dp"
+        android:textStyle="bold"
+        android:gravity="center"/>
+
+    <!-- Spacer to push the button down -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+
+    <!-- Button -->
     <Button
         android:id="@+id/wake_button"
         android:layout_width="140dp"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_gravity="center_horizontal|center"
         android:layout_marginTop="20dp"
         android:layout_marginBottom="80dp"
         android:background="#C01831"
         android:onClick="meonFb"
         android:text="I'm Awake"
-        android:textColor="#ffffff" />
-
+        android:textColor="#ffffff"
+        android:layout_gravity="center"/>
 </LinearLayout>
