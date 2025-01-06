@@ -26,6 +26,7 @@ class MainActivity : ComponentActivity() {
         textView8Hour = findViewById(R.id.text_view_8_hour)
         wakeButton = findViewById(R.id.wake_button)
 
+        // Add the Timer Logic
         wakeButton.setOnClickListener {
             Log.println(Log.INFO, "Button", "The user pressed the button")
 

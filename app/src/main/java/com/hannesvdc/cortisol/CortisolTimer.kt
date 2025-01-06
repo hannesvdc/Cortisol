@@ -11,8 +11,7 @@ import java.util.concurrent.TimeUnit
 class CortisolTimer(private var applicationContext : Context,
                     private var textview: TextView,
                     millisInFuture: Long,
-                    countDownInterval: Long) :
-    CountDownTimer(millisInFuture, countDownInterval) {
+                    countDownInterval: Long) : CountDownTimer(millisInFuture, countDownInterval) {
 
     private var isFinished : Boolean = false
 
