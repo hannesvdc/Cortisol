@@ -28,7 +28,7 @@
         android:layout_marginTop="140dp"
         android:text=""
         android:textColor="#008000"
-        android:textSize="40dp"
+        android:textSize="30dp"
         android:textStyle="bold"
         android:gravity="center"/>
 
@@ -40,7 +40,7 @@
         android:layout_marginTop="50dp"
         android:text=""
         android:textColor="#008000"
-        android:textSize="40dp"
+        android:textSize="30dp"
         android:textStyle="bold"
         android:gravity="center"/>
 
