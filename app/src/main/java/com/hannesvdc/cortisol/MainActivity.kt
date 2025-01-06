@@ -8,7 +8,6 @@ import android.widget.Button
 import android.widget.TextView
 import java.util.concurrent.TimeUnit
 
-
 class MainActivity : ComponentActivity() {
 
     private lateinit var textView4Hour: TextView
@@ -33,7 +32,7 @@ class MainActivity : ComponentActivity() {
             if (timer4 === null || timer4!!.hasFinished()) {
                 startTimers()
             } else {
-                Log.i("Timer", "Doing Nothing, the timer is still running.")
+                Log.i("Timer", "Doing nothing, the timer is still running.")
             }
         }
     }
