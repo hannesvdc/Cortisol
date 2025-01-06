@@ -1,9 +1,6 @@
 package com.hannesvdc.cortisol
 
-import android.annotation.SuppressLint
-import android.media.RingtoneManager
 import android.os.Bundle
-import android.os.CountDownTimer
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.enableEdgeToEdge
@@ -11,13 +8,14 @@ import android.widget.Button
 import android.widget.TextView
 import java.util.concurrent.TimeUnit
 
+
 class MainActivity : ComponentActivity() {
 
     private lateinit var textView4Hour: TextView
     private lateinit var textView8Hour: TextView
     private lateinit var wakeButton: Button
-    private var timer4: CountDownTimer? = null
-    private var timer8: CountDownTimer? = null
+    private var timer4: CortisolTimer? = null
+    private var timer8: CortisolTimer? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,61 +29,25 @@ class MainActivity : ComponentActivity() {
 
         wakeButton.setOnClickListener {
             Log.println(Log.INFO, "Button", "The user pressed the button")
-            startTimers()
+
+            if (timer4 === null || timer4!!.hasFinished()) {
+                startTimers()
+            } else {
+                Log.i("Timer", "Doing Nothing, the timer is still running.")
+            }
         }
     }
 
     private fun startTimers() {
         val durationInMillis4 = TimeUnit.HOURS.toMillis(4) // 4 hours in milliseconds
         val durationInMillis8 = TimeUnit.HOURS.toMillis(8) // 4 hours in milliseconds
+        val reportTime : Long = 500
 
-        timer4 = object : CountDownTimer(durationInMillis4, 500) {
-            @SuppressLint("SetTextI18n", "DefaultLocale")
-            override fun onTick(millisUntilFinished: Long) {
-                // Format time as HH:mm:ss
-                val timeRemaining = String.format("%02d:%02d:%02d",
-                    TimeUnit.MILLISECONDS.toHours(millisUntilFinished),
-                    TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished) % 60,
-                    TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished) % 60
-                )
-                textView4Hour.text = "Time remaining: $timeRemaining"
-            }
-
-            override fun onFinish() {
-                triggerAlarm()
-            }
-        }
-
-        timer8 = object : CountDownTimer(durationInMillis8, 500) {
-            @SuppressLint("SetTextI18n", "DefaultLocale")
-            override fun onTick(millisUntilFinished: Long) {
-                // Format time as HH:mm:ss
-                val timeRemaining = String.format("%02d:%02d:%02d",
-                    TimeUnit.MILLISECONDS.toHours(millisUntilFinished),
-                    TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished) % 60,
-                    TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished) % 60
-                )
-                textView8Hour.text = "Time remaining: $timeRemaining"
-            }
-
-            override fun onFinish() {
-                triggerAlarm()
-            }
-        }
+        timer4 = CortisolTimer(applicationContext, textView4Hour, durationInMillis4, reportTime)
+        timer8 = CortisolTimer(applicationContext, textView8Hour, durationInMillis8, reportTime)
 
         timer4?.start()
         timer8?.start()
-    }
-
-    private fun triggerAlarm() {
-        // Play the default alarm sound
-        val alarmUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM)
-            ?: RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
-        val ringtone = RingtoneManager.getRingtone(applicationContext, alarmUri)
-        ringtone.play()
-
-        // Log the alarm event
-        Log.i("MainActivity", "Alarm triggered!")
     }
 
     override fun onDestroy() {
