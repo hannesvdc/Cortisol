@@ -14,7 +14,7 @@
         android:layout_width="wrap_content"
         android:layout_height="40dp"
         android:gravity="center"
-        android:text="Press the Button to Start the Cortisol Timers"
+        android:text="Press the Button to Start the Timers"
         android:layout_marginTop="30dp"
         android:textColor="#000000"
         android:textSize="20dp"
