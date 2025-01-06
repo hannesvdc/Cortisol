@@ -9,39 +9,46 @@
     android:gravity="top"
     android:layout_gravity="center_horizontal">
 
-    <!-- First TextView -->
+    <TextView
+        android:id="@+id/info_view"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:gravity="center"
+        android:text="Press the Button to Start the Cortisol Timers"
+        android:layout_marginTop="30dp"
+        android:textColor="#000000"
+        android:textSize="20dp"
+        android:textStyle="bold" />
+        
     <TextView
         android:id="@+id/text_view_4_hour"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="140dp"
-        android:text="4-Hour Alarm"
+        android:text=""
         android:textColor="#008000"
         android:textSize="40dp"
         android:textStyle="bold"
         android:gravity="center"/>
 
-    <!-- Add space between TextViews -->
     <TextView
         android:id="@+id/text_view_8_hour"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="50dp"
-        android:text="8-Hour Alarm"
+        android:text=""
         android:textColor="#008000"
         android:textSize="40dp"
         android:textStyle="bold"
         android:gravity="center"/>
 
-    <!-- Spacer to push the button down -->
     <View
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"/>
 
-    <!-- Button -->
     <Button
         android:id="@+id/wake_button"
         android:layout_width="140dp"
