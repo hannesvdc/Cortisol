@@ -3,7 +3,6 @@ package com.hannesvdc.cortisol
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
-import androidx.activity.enableEdgeToEdge
 import android.widget.Button
 import android.widget.TextView
 import java.util.concurrent.TimeUnit
@@ -18,7 +17,6 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
 
         // Initialize UI components
         setContentView(R.layout.activity_main)
