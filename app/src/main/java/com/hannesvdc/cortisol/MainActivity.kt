@@ -1,14 +1,38 @@
 package com.hannesvdc.cortisol
 
+import android.annotation.SuppressLint
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 
 class MainActivity : AppCompatActivity() {
 
+    private lateinit var mainFragment : MainFragment
+
+    @SuppressLint("UnspecifiedRegisterReceiverFlag", "InlinedApi")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        mainFragment = MainFragment()
+
+        val receiver = object : BroadcastReceiver() {
+            override fun onReceive(context: Context, intent: Intent?) {
+                Log.i("broadcast", "broadcast received" + intent?.getStringExtra("extra_data"))
+
+                Log.i("fragment null", "Is Null?" )
+                mainFragment?.resetView()
+            }
+        }
+        val filter = IntentFilter("com.hannesvdc.cortisol.RESET_VIEWS")
+        LocalBroadcastManager.getInstance(applicationContext).registerReceiver(receiver, filter)
+
 
         // Load the WelcomeFragment as the initial screen
         if (savedInstanceState == null) {
@@ -32,7 +56,6 @@ class MainActivity : AppCompatActivity() {
      * Called from SetupFragment.
      */
     fun navigateToMainFragment(preferences: Bundle) {
-        val mainFragment = MainFragment()
         mainFragment.arguments = preferences // Pass preferences as arguments
         loadFragment(mainFragment) // Load the MainFragment
     }

@@ -52,10 +52,16 @@ class MainFragment : Fragment() {
 
     private fun setSystemAlarms() {
         val alarmManager = requireContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        val intent = Intent(requireContext(), AlarmReceiver::class.java)
+        val intent4Hour = Intent(requireContext(), AlarmReceiver::class.java).apply {
+            putExtra("ALARM_TYPE", "4-hour alarm") // Add an extra to distinguish the alarm
+        }
+        val intent8Hour = Intent(requireContext(), AlarmReceiver::class.java).apply {
+            putExtra("ALARM_TYPE", "8-hour alarm") // Add an extra to distinguish the alarm
+        }
 
-        // Create a PendingIntent
-        val pendingIntent = PendingIntent.getBroadcast(requireContext(), 0, intent, PendingIntent.FLAG_IMMUTABLE)
+        // Make the pending intents
+        val pendingIntent4Hour = PendingIntent.getBroadcast(context, 0, intent4Hour, PendingIntent.FLAG_IMMUTABLE)
+        val pendingIntent8Hour = PendingIntent.getBroadcast(context, 1, intent8Hour, PendingIntent.FLAG_IMMUTABLE)
 
         // Set the alarm for 4 hours later
         val triggerTime4Hour = System.currentTimeMillis() + 10 * 1000 // 4 hours in milliseconds
@@ -63,20 +69,20 @@ class MainFragment : Fragment() {
         alarmManager.setExactAndAllowWhileIdle(
             AlarmManager.RTC_WAKEUP,
             triggerTime4Hour,
-            pendingIntent
+            pendingIntent4Hour
         )
         alarmManager.setExactAndAllowWhileIdle(
             AlarmManager.RTC_WAKEUP,
             triggerTime8Hour,
-            pendingIntent
+            pendingIntent8Hour
         )
 
         Log.i("Alarms", "System Alarms have been set")
     }
 
     private fun setCountdownTimers() {
-        val four_hours_in_millis  : Long = 10 * 1000//4 * 60 * 60 * 1000
-        val eight_hours_in_millis : Long = 10 * 1000//8 * 60 * 60 * 1000
+        val four_hours_in_millis  : Long = 10 * 1000
+        val eight_hours_in_millis : Long = 10 * 1000
 
         val timer4Hour = object: CountDownTimer(four_hours_in_millis, 1000) {
             override fun onTick(millisUntilFinished: Long) {
@@ -109,5 +115,12 @@ class MainFragment : Fragment() {
 
         timer4Hour.start()
         timer8Hour.start()
+    }
+
+    fun resetView() {
+        Log.i("MainFragment", "Resetting Views")
+        wakeButton.isEnabled = true
+        fourHourTextview.text = "00:00:00"
+        eightHourTextview.text = "00:00:00"
     }
 }
