@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
@@ -13,10 +14,13 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import android.util.Log
 import android.widget.Button
+import android.widget.TextView
 
 class MainFragment : Fragment() {
 
     private lateinit var wakeButton : Button
+    private lateinit var fourHourTextview : TextView
+    private lateinit var eightHourTextview : TextView
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) : View? {
         return inflater.inflate(R.layout.treatment, container, false)
@@ -39,7 +43,11 @@ class MainFragment : Fragment() {
         wakeButton.setOnClickListener {
             wakeButton.isEnabled = false
             setSystemAlarms()
+            setCountdownTimers()
         }
+
+        fourHourTextview = view.findViewById(R.id.countdownTextView4)
+        eightHourTextview = view.findViewById(R.id.countdownTextView8)
     }
 
     private fun setSystemAlarms() {
@@ -64,5 +72,42 @@ class MainFragment : Fragment() {
         )
 
         Log.i("Alarms", "System Alarms have been set")
+    }
+
+    private fun setCountdownTimers() {
+        val four_hours_in_millis  : Long = 4 * 60 * 60 * 1000
+        val eight_hours_in_millis : Long = 8 * 60 * 60 * 1000
+
+        val timer4Hour = object: CountDownTimer(four_hours_in_millis, 1000) {
+            override fun onTick(millisUntilFinished: Long) {
+                val hours = millisUntilFinished / (1000 * 60 * 60)
+                val minutes = (millisUntilFinished % (1000 * 60 * 60)) / (1000 * 60)
+                val seconds = (millisUntilFinished % (1000 * 60)) / 1000
+
+                // Update the TextView with the formatted time
+                fourHourTextview.text = String.format("%02d:%02d:%02d", hours, minutes, seconds)
+            }
+
+            override fun onFinish() {
+                fourHourTextview.text = "4-Hour Alarm has Passed"
+            }
+        }
+        val timer8Hour = object: CountDownTimer(eight_hours_in_millis, 1000) {
+            override fun onTick(millisUntilFinished: Long) {
+                val hours = millisUntilFinished / (1000 * 60 * 60)
+                val minutes = (millisUntilFinished % (1000 * 60 * 60)) / (1000 * 60)
+                val seconds = (millisUntilFinished % (1000 * 60)) / 1000
+
+                // Update the TextView with the formatted time
+                eightHourTextview.text = String.format("%02d:%02d:%02d", hours, minutes, seconds)
+            }
+
+            override fun onFinish() {
+                fourHourTextview.text = "8-Hour Alarm has Passed"
+            }
+        }
+
+        timer4Hour.start()
+        timer8Hour.start()
     }
 }
