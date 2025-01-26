@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -15,18 +16,37 @@
         android:textStyle="bold"
         android:textColor="#000000"
         android:text="@string/intro_text"/>
-    <com.google.android.material.chip.Chip
-        android:id="@+id/addison_chip"
+
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/disease_chipgroup"
         android:layout_width="match_parent"
-        android:layout_height="51dp"
-        android:layout_marginStart="30dp"
-        android:layout_marginTop="40dp"
-        android:layout_marginBottom="40dp"
-        android:text="@string/addison_check" />
+        android:layout_height="750dp"
+        android:orientation="vertical"
+        android:padding="16dp"
+        app:chipSpacingVertical="8dp"
+        app:singleLine="false"
+        app:singleSelection="false">
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/addison_chip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checkable="true"
+            android:text="@string/addison_check" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/second_disease"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checkable="true"
+            android:text="@string/second_check" />
+    </com.google.android.material.chip.ChipGroup>
+
     <Button
         android:id="@+id/continue_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/intro_continue"
-        android:enabled="false"/>
+        android:enabled="false"
+        android:layout_marginTop="20dp"
+        android:text="@string/intro_continue" />
 </LinearLayout>
