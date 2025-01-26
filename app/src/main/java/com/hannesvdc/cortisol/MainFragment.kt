@@ -108,9 +108,7 @@ class MainFragment : Fragment() {
                 eightHourTextview.text = String.format("%02d:%02d:%02d", hours, minutes, seconds)
             }
 
-            override fun onFinish() {
-                eightHourTextview.text = "8-Hour Alarm has Passed"
-            }
+            override fun onFinish() {}
         }
 
         timer4Hour.start()

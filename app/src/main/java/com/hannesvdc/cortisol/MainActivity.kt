@@ -24,10 +24,8 @@ class MainActivity : AppCompatActivity() {
 
         val receiver = object : BroadcastReceiver() {
             override fun onReceive(context: Context, intent: Intent?) {
-                Log.i("broadcast", "broadcast received" + intent?.getStringExtra("extra_data"))
-
-                Log.i("fragment null", "Is Null?" )
-                mainFragment?.resetView()
+                Log.i("broadcast", "broadcast received")
+                mainFragment.resetView()
             }
         }
         val filter = IntentFilter("com.hannesvdc.cortisol.RESET_VIEWS")
