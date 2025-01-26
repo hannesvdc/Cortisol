@@ -20,12 +20,12 @@ class SetupFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        addisonCheck = view.findViewById<Chip>(R.id.addison_chip)
+        addisonCheck = view.findViewById(R.id.addison_chip)
         addisonCheck.setOnClickListener {
             button.isEnabled = addisonCheck.isChecked
         }
 
-        button = view.findViewById<Button>(R.id.continue_button)
+        button = view.findViewById(R.id.continue_button)
         button.setOnClickListener {
             // Gather all Preferences
             val preferences = Bundle()
@@ -35,6 +35,4 @@ class SetupFragment : Fragment() {
             (activity as? MainActivity)?.navigateToMainFragment(preferences)
         }
     }
-
-
 }

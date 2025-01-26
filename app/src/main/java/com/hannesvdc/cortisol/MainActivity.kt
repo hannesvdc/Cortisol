@@ -3,14 +3,12 @@ package com.hannesvdc.cortisol
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import com.hannesvdc.cortisol.SetupFragment
-import com.hannesvdc.cortisol.MainFragment
 
 class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        //setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_main)
 
         // Load the WelcomeFragment as the initial screen
         if (savedInstanceState == null) {
