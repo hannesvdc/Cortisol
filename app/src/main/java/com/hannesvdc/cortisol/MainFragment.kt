@@ -11,8 +11,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import android.util.Log
+import android.widget.Button
 
 class MainFragment : Fragment() {
+
+    private lateinit var wakeButton : Button
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) : View? {
         return inflater.inflate(R.layout.treatment, container, false)
@@ -23,13 +27,19 @@ class MainFragment : Fragment() {
 
         // Ask view permissions
         if (!Settings.canDrawOverlays(context)) {
+            Log.i("Permissions", "Asking permission to draw overlays")
             val intent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION)
             intent.data = Uri.parse("package:${context?.packageName}")
             startActivityForResult(intent, 123) // 123 is an arbitrary request code
+        } else {
+            Log.i("Permissions", "Apparently we can draw overlays")
         }
 
-        // Create alarm logic
-        setSystemAlarms()
+        wakeButton = view.findViewById(R.id.wake_button)
+        wakeButton.setOnClickListener {
+            wakeButton.isEnabled = false
+            setSystemAlarms()
+        }
     }
 
     private fun setSystemAlarms() {
@@ -37,7 +47,7 @@ class MainFragment : Fragment() {
         val intent = Intent(requireContext(), AlarmReceiver::class.java)
 
         // Create a PendingIntent
-        val pendingIntent = PendingIntent.getBroadcast(requireContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+        val pendingIntent = PendingIntent.getBroadcast(requireContext(), 0, intent, PendingIntent.FLAG_IMMUTABLE)
 
         // Set the alarm for 4 hours later
         val triggerTime4Hour = System.currentTimeMillis() + 4 * 60 * 60 * 1000 // 4 hours in milliseconds
@@ -52,5 +62,7 @@ class MainFragment : Fragment() {
             triggerTime8Hour,
             pendingIntent
         )
+
+        Log.i("Alarms", "System Alarms have been set")
     }
 }
