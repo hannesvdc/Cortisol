@@ -1,56 +1,41 @@
 package com.hannesvdc.cortisol
 
 import android.os.Bundle
-import android.util.Log
-import androidx.activity.ComponentActivity
-import android.widget.Button
-import android.widget.TextView
-import java.util.concurrent.TimeUnit
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import com.hannesvdc.cortisol.SetupFragment
+import com.hannesvdc.cortisol.MainFragment
 
-class MainActivity : ComponentActivity() {
-
-    private lateinit var textView4Hour: TextView
-    private lateinit var textView8Hour: TextView
-    private lateinit var wakeButton: Button
-    private var timer4: CortisolTimer? = null
-    private var timer8: CortisolTimer? = null
+class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        //setContentView(R.layout.activity_main)
 
-        // Initialize UI components
-        setContentView(R.layout.activity_main)
-        textView4Hour = findViewById(R.id.text_view_4_hour)
-        textView8Hour = findViewById(R.id.text_view_8_hour)
-        wakeButton = findViewById(R.id.wake_button)
-
-        // Add the Timer Logic
-        wakeButton.setOnClickListener {
-            Log.println(Log.INFO, "Button", "The user pressed the button")
-
-            if (timer4 === null || timer4!!.hasFinished()) {
-                startTimers()
-            } else {
-                Log.i("Timer", "Doing nothing, the timer is still running.")
-            }
+        // Load the WelcomeFragment as the initial screen
+        if (savedInstanceState == null) {
+            loadFragment(SetupFragment())
         }
     }
 
-    private fun startTimers() {
-        val durationInMillis4 = TimeUnit.HOURS.toMillis(4) // 4 hours in milliseconds
-        val durationInMillis8 = TimeUnit.HOURS.toMillis(8) // 4 hours in milliseconds
-        val reportTime : Long = 500
-
-        timer4 = CortisolTimer(applicationContext, textView4Hour, durationInMillis4, reportTime)
-        timer8 = CortisolTimer(applicationContext, textView8Hour, durationInMillis8, reportTime)
-
-        timer4?.start()
-        timer8?.start()
+    /**
+     * Function to load a fragment into the container.
+     * @param fragment The fragment to display.
+     */
+    private fun loadFragment(fragment: Fragment) {
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, fragment) // Replace current fragment
+            .addToBackStack(null) // Add transaction to the back stack (optional for navigation)
+            .commit()
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        timer4?.cancel()
-        timer8?.cancel()
+    /**
+     * Function to handle navigation from WelcomeFragment to MainFragment.
+     * Called from WelcomeFragment.
+     */
+    fun navigateToMainFragment(preferences: Bundle) {
+        val mainFragment = MainFragment()
+        mainFragment.arguments = preferences // Pass preferences as arguments
+        loadFragment(mainFragment) // Load the MainFragment
     }
 }
