@@ -28,8 +28,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     /**
-     * Function to handle navigation from WelcomeFragment to MainFragment.
-     * Called from WelcomeFragment.
+     * Function to handle navigation from SetupFragment to MainFragment.
+     * Called from SetupFragment.
      */
     fun navigateToMainFragment(preferences: Bundle) {
         val mainFragment = MainFragment()
