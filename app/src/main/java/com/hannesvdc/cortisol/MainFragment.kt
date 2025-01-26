@@ -58,8 +58,8 @@ class MainFragment : Fragment() {
         val pendingIntent = PendingIntent.getBroadcast(requireContext(), 0, intent, PendingIntent.FLAG_IMMUTABLE)
 
         // Set the alarm for 4 hours later
-        val triggerTime4Hour = System.currentTimeMillis() + 4 * 60 * 60 * 1000 // 4 hours in milliseconds
-        val triggerTime8Hour = System.currentTimeMillis() + 8 * 60 * 60 * 1000 // 4 hours in milliseconds
+        val triggerTime4Hour = System.currentTimeMillis() + 10 * 1000 // 4 hours in milliseconds
+        val triggerTime8Hour = System.currentTimeMillis() + 10 * 1000 // 8 hours in milliseconds
         alarmManager.setExactAndAllowWhileIdle(
             AlarmManager.RTC_WAKEUP,
             triggerTime4Hour,
@@ -75,8 +75,8 @@ class MainFragment : Fragment() {
     }
 
     private fun setCountdownTimers() {
-        val four_hours_in_millis  : Long = 4 * 60 * 60 * 1000
-        val eight_hours_in_millis : Long = 8 * 60 * 60 * 1000
+        val four_hours_in_millis  : Long = 10 * 1000//4 * 60 * 60 * 1000
+        val eight_hours_in_millis : Long = 10 * 1000//8 * 60 * 60 * 1000
 
         val timer4Hour = object: CountDownTimer(four_hours_in_millis, 1000) {
             override fun onTick(millisUntilFinished: Long) {
@@ -103,7 +103,7 @@ class MainFragment : Fragment() {
             }
 
             override fun onFinish() {
-                fourHourTextview.text = "8-Hour Alarm has Passed"
+                eightHourTextview.text = "8-Hour Alarm has Passed"
             }
         }
 

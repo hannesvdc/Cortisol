@@ -11,6 +11,7 @@ import android.view.View
 import android.view.WindowManager
 import android.widget.Button
 import androidx.core.app.NotificationCompat
+import android.util.Log
 
 class AlarmReceiver : BroadcastReceiver() {
 
@@ -18,6 +19,7 @@ class AlarmReceiver : BroadcastReceiver() {
     private var floatingView: View? = null
 
     override fun onReceive(context: Context, intent: Intent?) {
+        Log.i("Alarm", "System alarm has passed")
         // Show Floating View (if permission granted)
         if (Settings.canDrawOverlays(context)) {
             showFloatingView(context)
@@ -67,6 +69,7 @@ class AlarmReceiver : BroadcastReceiver() {
         val notification = NotificationCompat.Builder(context, "alarm_channel")
             .setContentTitle("Alarm Triggered")
             .setContentText("Your 4-hour alarm has gone off!")
+            .setSmallIcon(android.R.drawable.ic_dialog_info)  // Use a built-in Android icon for now
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .build()
 
