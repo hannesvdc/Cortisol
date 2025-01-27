@@ -31,7 +31,7 @@ class MainActivity : AppCompatActivity() {
         // Request all necessary permissions using pop-up windows
         requestPostNotification()
 
-        // Instantiate the main fragment, we will use it anyway, either now or through the SetupFragment
+        // Instantiate the main fragment and setup a BroadcastManager for the AlarmReceiver
         mainFragment = MainFragment()
         val receiver = object : BroadcastReceiver() {
             override fun onReceive(context: Context, intent: Intent?) {
@@ -66,11 +66,13 @@ class MainActivity : AppCompatActivity() {
 
     /**
      * Function to handle navigation from SetupFragment to MainFragment.
-     * Called from SetupFragment.
+     * Called from SetupFragment or onCreate.
      */
     fun navigateToMainFragment(preferences: Bundle) {
         // Store the new preferences first
-        storePreferences(preferences)
+        if ( !preferencesFile.exists() ) {
+            storePreferences(preferences)
+        }
 
         // Then display the main fragment
         mainFragment.arguments = preferences
