@@ -21,6 +21,8 @@ class MainFragment : Fragment() {
     private lateinit var wakeButton : Button
     private lateinit var fourHourTextview : TextView
     private lateinit var eightHourTextview : TextView
+    private val fourHoursInMillis : Long = 10 * 1000 //4 * 60 * 60 * 1000
+    private val eightHoursInMillis : Long = 20 * 1000 //8 * 60 * 60 * 1000
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) : View? {
         return inflater.inflate(R.layout.treatment, container, false)
@@ -64,8 +66,8 @@ class MainFragment : Fragment() {
         val pendingIntent8Hour = PendingIntent.getBroadcast(context, 1, intent8Hour, PendingIntent.FLAG_IMMUTABLE)
 
         // Set the alarm for 4 hours later
-        val triggerTime4Hour = System.currentTimeMillis() + 4 * 60 * 60 * 1000 // 4 hours in milliseconds
-        val triggerTime8Hour = System.currentTimeMillis() + 8 * 60 * 60 * 1000 // 8 hours in milliseconds
+        val triggerTime4Hour = System.currentTimeMillis() + fourHoursInMillis
+        val triggerTime8Hour = System.currentTimeMillis() + eightHoursInMillis
         alarmManager.setExactAndAllowWhileIdle(
             AlarmManager.RTC_WAKEUP,
             triggerTime4Hour,
@@ -81,10 +83,7 @@ class MainFragment : Fragment() {
     }
 
     private fun setCountdownTimers() {
-        val four_hours_in_millis  : Long = 4 * 60 * 60 * 1000
-        val eight_hours_in_millis : Long = 8 * 60 * 60 * 1000
-
-        val timer4Hour = object: CountDownTimer(four_hours_in_millis, 1000) {
+        val timer4Hour = object: CountDownTimer(fourHoursInMillis, 1000) {
             override fun onTick(millisUntilFinished: Long) {
                 val hours = millisUntilFinished / (1000 * 60 * 60)
                 val minutes = (millisUntilFinished % (1000 * 60 * 60)) / (1000 * 60)
@@ -98,7 +97,7 @@ class MainFragment : Fragment() {
                 fourHourTextview.text = "4-Hour Alarm has Passed"
             }
         }
-        val timer8Hour = object: CountDownTimer(eight_hours_in_millis, 1000) {
+        val timer8Hour = object: CountDownTimer(eightHoursInMillis, 1000) {
             override fun onTick(millisUntilFinished: Long) {
                 val hours = millisUntilFinished / (1000 * 60 * 60)
                 val minutes = (millisUntilFinished % (1000 * 60 * 60)) / (1000 * 60)

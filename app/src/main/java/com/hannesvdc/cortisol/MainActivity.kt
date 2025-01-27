@@ -36,8 +36,7 @@ class MainActivity : AppCompatActivity() {
         }
         val filter = IntentFilter("com.hannesvdc.cortisol.RESET_VIEWS")
         LocalBroadcastManager.getInstance(applicationContext).registerReceiver(receiver, filter)
-
-
+        
         // Load the WelcomeFragment as the initial screen
         if (savedInstanceState == null) {
             loadFragment(SetupFragment())
