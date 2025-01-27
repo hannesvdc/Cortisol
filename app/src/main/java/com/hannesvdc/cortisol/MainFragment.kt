@@ -21,8 +21,8 @@ class MainFragment : Fragment() {
     private lateinit var wakeButton : Button
     private lateinit var fourHourTextview : TextView
     private lateinit var eightHourTextview : TextView
-    private val fourHoursInMillis : Long = 10 * 1000 //4 * 60 * 60 * 1000
-    private val eightHoursInMillis : Long = 20 * 1000 //8 * 60 * 60 * 1000
+    private val fourHoursInMillis : Long = 4 * 60 * 60 * 1000
+    private val eightHoursInMillis : Long = 8 * 60 * 60 * 1000
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) : View? {
         return inflater.inflate(R.layout.treatment, container, false)
