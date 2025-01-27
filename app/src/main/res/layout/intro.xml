@@ -20,7 +20,7 @@
     <com.google.android.material.chip.ChipGroup
         android:id="@+id/disease_chipgroup"
         android:layout_width="match_parent"
-        android:layout_height="750dp"
+        android:layout_height="500dp"
         android:orientation="vertical"
         android:padding="16dp"
         app:chipSpacingVertical="8dp"

@@ -14,6 +14,10 @@ import androidx.core.app.NotificationCompat
 import android.util.Log
 import android.widget.TextView
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import android.Manifest
+import android.content.pm.PackageManager
+import android.os.Build
+import androidx.core.content.ContextCompat
 
 class AlarmReceiver : BroadcastReceiver() {
 
@@ -29,13 +33,13 @@ class AlarmReceiver : BroadcastReceiver() {
         }
         Log.i("Alarm", "System alarm has passed: $alarmType")
 
+        // Show Notification
+        showNotification(context, message)
+
         // Show Floating View (if permission granted)
         if (Settings.canDrawOverlays(context)) {
             showFloatingView(context, message)
         }
-
-        // Show Notification
-        showNotification(context, message)
 
         if ( alarmType == "8-hour alarm") {
             Log.i("alarmreceiver", "broadcast sent")
@@ -91,6 +95,6 @@ class AlarmReceiver : BroadcastReceiver() {
             .build()
 
         // Show notification
-        notificationManager.notify(0, notification)
+        notificationManager.notify(1, notification)
     }
 }
