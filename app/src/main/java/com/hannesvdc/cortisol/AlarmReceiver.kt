@@ -45,7 +45,6 @@ class AlarmReceiver : BroadcastReceiver() {
         }
 
         if ( alarmType == "8-hour alarm") {
-            Log.i("alarmreceiver", "broadcast sent")
             val resetIntent = Intent("com.hannesvdc.cortisol.RESET_VIEWS")
             LocalBroadcastManager.getInstance(context).sendBroadcast(resetIntent)
         }

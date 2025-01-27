@@ -115,7 +115,6 @@ class MainFragment : Fragment() {
     }
 
     fun resetView() {
-        Log.i("MainFragment", "Resetting Views")
         wakeButton.isEnabled = true
         fourHourTextview.text = "04:00:00"
         eightHourTextview.text = "08:00:00"

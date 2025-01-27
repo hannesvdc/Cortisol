@@ -35,7 +35,6 @@ class MainActivity : AppCompatActivity() {
         mainFragment = MainFragment()
         val receiver = object : BroadcastReceiver() {
             override fun onReceive(context: Context, intent: Intent?) {
-                Log.i("broadcast", "broadcast received")
                 mainFragment.resetView()
             }
         }
