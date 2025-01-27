@@ -39,7 +39,7 @@
         android:shadowDx="2"
         android:shadowDy="2"
         android:shadowRadius="3"
-        android:text="00:00:00"
+        android:text="04:00:00"
         android:textColor="@android:color/holo_red_dark"
         android:textSize="48sp"
         android:textStyle="bold" />
@@ -67,7 +67,7 @@
         android:shadowDx="2"
         android:shadowDy="2"
         android:shadowRadius="3"
-        android:text="00:00:00"
+        android:text="08:00:00"
         android:textColor="@android:color/holo_red_dark"
         android:textSize="48sp"
         android:textStyle="bold" />

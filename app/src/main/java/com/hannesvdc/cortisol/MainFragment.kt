@@ -64,8 +64,8 @@ class MainFragment : Fragment() {
         val pendingIntent8Hour = PendingIntent.getBroadcast(context, 1, intent8Hour, PendingIntent.FLAG_IMMUTABLE)
 
         // Set the alarm for 4 hours later
-        val triggerTime4Hour = System.currentTimeMillis() + 10 * 1000 // 4 hours in milliseconds
-        val triggerTime8Hour = System.currentTimeMillis() + 10 * 1000 // 8 hours in milliseconds
+        val triggerTime4Hour = System.currentTimeMillis() + 4 * 60 * 60 * 1000 // 4 hours in milliseconds
+        val triggerTime8Hour = System.currentTimeMillis() + 8 * 60 * 60 * 1000 // 8 hours in milliseconds
         alarmManager.setExactAndAllowWhileIdle(
             AlarmManager.RTC_WAKEUP,
             triggerTime4Hour,
@@ -81,8 +81,8 @@ class MainFragment : Fragment() {
     }
 
     private fun setCountdownTimers() {
-        val four_hours_in_millis  : Long = 10 * 1000
-        val eight_hours_in_millis : Long = 10 * 1000
+        val four_hours_in_millis  : Long = 4 * 60 * 60 * 1000
+        val eight_hours_in_millis : Long = 8 * 60 * 60 * 1000
 
         val timer4Hour = object: CountDownTimer(four_hours_in_millis, 1000) {
             override fun onTick(millisUntilFinished: Long) {
@@ -118,7 +118,7 @@ class MainFragment : Fragment() {
     fun resetView() {
         Log.i("MainFragment", "Resetting Views")
         wakeButton.isEnabled = true
-        fourHourTextview.text = "00:00:00"
-        eightHourTextview.text = "00:00:00"
+        fourHourTextview.text = "04:00:00"
+        eightHourTextview.text = "08:00:00"
     }
 }

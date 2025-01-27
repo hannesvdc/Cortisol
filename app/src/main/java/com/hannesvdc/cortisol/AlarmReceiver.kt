@@ -51,6 +51,7 @@ class AlarmReceiver : BroadcastReceiver() {
         }
     }
 
+    @SuppressLint("InflateParams")
     private fun showFloatingView(context: Context, message : String) {
         // Initialize WindowManager
         windowManager = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
