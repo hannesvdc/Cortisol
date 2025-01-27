@@ -1,10 +1,14 @@
 package com.hannesvdc.cortisol
 
+import android.annotation.SuppressLint
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.os.Build
+import android.os.VibrationEffect
+import android.os.Vibrator
 import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
@@ -14,15 +18,14 @@ import androidx.core.app.NotificationCompat
 import android.util.Log
 import android.widget.TextView
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
-import android.Manifest
-import android.content.pm.PackageManager
-import android.os.Build
-import androidx.core.content.ContextCompat
 
 class AlarmReceiver : BroadcastReceiver() {
 
     private var windowManager: WindowManager? = null
     private var floatingView: View? = null
+
+    private var isVibrating = true
+    private var vibrateThread: Thread? = null
 
     override fun onReceive(context: Context, intent: Intent?) {
         val alarmType = intent?.getStringExtra("ALARM_TYPE") ?: "Unknown alarm"
@@ -71,9 +74,42 @@ class AlarmReceiver : BroadcastReceiver() {
         // Handle close button in floating view
         val closeButton: Button = floatingView!!.findViewById(R.id.closeButton)
         closeButton.setOnClickListener {
-            // Remove floating view when close button is pressed
+            isVibrating = false
+            stopVibration(context)
             windowManager?.removeView(floatingView)
         }
+
+        // Start playing sound and vibration continuously
+        isVibrating = true
+        startContinuousVibration(context)
+    }
+
+    @SuppressLint("ObsoleteSdkInt")
+    private fun startContinuousVibration(context: Context) {
+        val vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+        vibrateThread = Thread {
+            while (isVibrating) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    // For devices running Android Oreo and above
+                    val vibrationEffect = VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE)
+                    vibrator.vibrate(vibrationEffect)
+                } else {
+                    // For older devices
+                    vibrator.vibrate(500)
+                }
+                try {
+                    Thread.sleep(1000) // Vibrate every 1 second (adjustable)
+                } catch (e: InterruptedException) {
+                    e.printStackTrace()
+                }
+            }
+        }
+        vibrateThread?.start()
+    }
+
+    private fun stopVibration(context : Context) {
+        val vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+        vibrator.cancel() // Stop vibration
     }
 
     private fun showNotification(context: Context, message : String) {
