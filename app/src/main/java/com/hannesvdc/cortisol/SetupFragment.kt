@@ -37,7 +37,7 @@ class SetupFragment : Fragment() {
             preferences.putBoolean("Addison", (diseaseChipGroup.getChildAt(0) as Chip).isChecked)
 
             // Get a reference to the MainActivity and trigger navigation
-            (activity as? MainActivity)?.navigateToMainFragment(preferences)
+            (activity as? MainActivity)?.navigateToMainFragment(preferences, true)
         }
     }
 }

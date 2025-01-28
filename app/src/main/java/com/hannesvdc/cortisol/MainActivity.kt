@@ -44,7 +44,7 @@ class MainActivity : AppCompatActivity() {
         treatmentPlanFile = File(applicationContext.filesDir, "treatmentplan.json")
         if ( treatmentPlanFile.exists() ) {
             val treatments = loadTreatmentPlan()
-            navigateToMainFragment(treatments)
+            navigateToMainFragment(treatments, false)
         } else if (savedInstanceState == null ) {
             loadFragment(SetupFragment())
         }
@@ -65,7 +65,7 @@ class MainActivity : AppCompatActivity() {
      * Function to handle navigation from SetupFragment to MainFragment.
      * Called from SetupFragment or onCreate.
      */
-    fun navigateToMainFragment(treatmentPlan: Bundle) {
+    fun navigateToMainFragment(treatmentPlan: Bundle, fromSetupFragment : Boolean) {
         if ( !treatmentPlanFile.exists() ) {
             storeTreatmentPlan(treatmentPlan)
         }
@@ -73,6 +73,7 @@ class MainActivity : AppCompatActivity() {
         val argumentsBundle = Bundle()
         argumentsBundle.putBundle("treatment_plan", treatmentPlan)
         argumentsBundle.putString("shared_preferences_key", sharedPreferencesKey)
+        argumentsBundle.putBoolean("from_setup_fragment", fromSetupFragment)
 
         mainFragment.arguments = argumentsBundle
         loadFragment(mainFragment)

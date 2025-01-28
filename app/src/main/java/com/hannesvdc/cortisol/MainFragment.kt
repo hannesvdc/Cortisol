@@ -55,10 +55,13 @@ class MainFragment : Fragment() {
         fourHourTextview = view.findViewById(R.id.countdownTextView4)
         eightHourTextview = view.findViewById(R.id.countdownTextView8)
 
+        val fromSetupFragment = arguments?.getBoolean("from_setup_fragment")
         val sharedPreferencesKey = arguments?.getString("shared_arguments_key")
         sharedPreferences = requireContext().getSharedPreferences(sharedPreferencesKey, Context.MODE_PRIVATE)
         uiHandler = Handler(Looper.getMainLooper())
-        if ( sharedPreferences.contains(alarmStartTimeKey) ) {
+        if ( fromSetupFragment == true ) {
+            resetFragment()
+        } else if ( sharedPreferences.contains(alarmStartTimeKey) ) {
             val timeSinceStartAlarms = System.currentTimeMillis() - sharedPreferences.getLong(alarmStartTimeKey, 0L)
             if ( timeSinceStartAlarms > eightHoursInMillis ) {
                 resetFragment()
@@ -75,7 +78,7 @@ class MainFragment : Fragment() {
     fun resetFragment() {
         runUpdateThread = false
         wakeButton.isEnabled = true
-        sharedPreferences.edit().remove(alarmStartTimeKey).apply()
+        sharedPreferences.edit().clear().apply()
     }
 
     /**
@@ -126,7 +129,7 @@ class MainFragment : Fragment() {
                     var eightHourText = "8-Hour Alarm has Passed"
                     if ( millisUntilFinished < eightHoursInMillis ) {
                         eightHourText = String.format(locale, "%02d:%02d:%02d", hours, minutes, seconds)
-                        if ( millisUntilFinished in 1..<fourHoursInMillis ) {
+                        if ( millisUntilFinished >= fourHoursInMillis ) {
                             fourHourText = String.format(locale, "%02d:%02d:%02d", hours - 4, minutes, seconds)
                         }
                     }
