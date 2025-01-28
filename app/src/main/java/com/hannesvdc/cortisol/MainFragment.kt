@@ -116,7 +116,7 @@ class MainFragment : Fragment() {
         val updateViewsThread = Thread {
             while ( runUpdateThread ) {
                 try {
-                    Thread.sleep(500)
+                    Thread.sleep(900)
 
                     // Get the time the alarms were started
                     val alarmStartTime = sharedPreferences.getLong(alarmStartTimeKey, -1L)
