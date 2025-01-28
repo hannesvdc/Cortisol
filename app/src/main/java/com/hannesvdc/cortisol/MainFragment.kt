@@ -60,14 +60,29 @@ class MainFragment : Fragment() {
         eightHourTextview = view.findViewById(R.id.countdownTextView8)
     }
 
+    /**
+     * Function that is called when both alarms have finished. This function cleans up the
+     * fragment and makes it ready for a new day.
+     */
+    fun resetView() {
+        runUpdateThread = false
+        wakeButton.isEnabled = true
+
+        sharedPreferences.edit {
+            remove("alarm_start_time")
+            apply()
+        }
+    }
+
+    /**
+     * This function creates the four-hour and eight-hour alarms using an alarmManager.
+     */
     private fun setSystemAlarms() {
-        // Read the current time and put it in sharedPreferences
         val currentTime = System.currentTimeMillis()
         sharedPreferences.edit {
             putLong("alarm_start_time", currentTime)
             apply()
         }
-
         val triggerTime4Hour = currentTime + fourHoursInMillis
         val triggerTime8Hour = currentTime + eightHoursInMillis
 
@@ -132,10 +147,5 @@ class MainFragment : Fragment() {
             }
         }
         updateViewsThread.start()
-    }
-
-    fun resetView() {
-        runUpdateThread = false
-        wakeButton.isEnabled = true
     }
 }
