@@ -41,7 +41,7 @@ class MainActivity : AppCompatActivity() {
         val filter = IntentFilter("com.hannesvdc.cortisol.RESET_VIEWS")
         LocalBroadcastManager.getInstance(applicationContext).registerReceiver(receiver, filter)
 
-        // Load existing preferences from file if they exist, otherwise start the SetupFragment
+        // Load existing treatment plan from file if they exist, otherwise run the SetupFragment
         treatmentPlanFile = File(applicationContext.filesDir, "treatmentplan.json")
         if ( treatmentPlanFile.exists() ) {
             val treatments = loadTreatmentPlan()

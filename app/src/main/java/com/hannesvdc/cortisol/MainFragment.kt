@@ -30,6 +30,7 @@ class MainFragment : Fragment() {
     private var runUpdateThread : Boolean = false
     private val fourHoursInMillis : Long = 4 * 60 * 60 * 1000
     private val eightHoursInMillis : Long = 8 * 60 * 60 * 1000
+    private val alarmStartTimeKey = "alarm_start_time"
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) : View? {
         val sharedPreferencesKey = arguments?.getString("shared_arguments_key")
@@ -58,6 +59,12 @@ class MainFragment : Fragment() {
 
         fourHourTextview = view.findViewById(R.id.countdownTextView4)
         eightHourTextview = view.findViewById(R.id.countdownTextView8)
+
+        // This statement is invoked whenever the timers are already running.
+        // This event typically happens when the OS cancels, stops or pauses the app.
+        if ( sharedPreferences.contains(alarmStartTimeKey) ) {
+            startAlarmReadingThreads()
+        }
     }
 
     /**
@@ -80,7 +87,7 @@ class MainFragment : Fragment() {
     private fun setSystemAlarms() {
         val currentTime = System.currentTimeMillis()
         sharedPreferences.edit {
-            putLong("alarm_start_time", currentTime)
+            putLong(alarmStartTimeKey, currentTime)
             apply()
         }
         val triggerTime4Hour = currentTime + fourHoursInMillis
@@ -112,7 +119,7 @@ class MainFragment : Fragment() {
                     Thread.sleep(500)
 
                     // Get the time the alarms were started
-                    val alarmStartTime = sharedPreferences.getLong("alarm_start_time", -1L)
+                    val alarmStartTime = sharedPreferences.getLong(alarmStartTimeKey, -1L)
                     val millisUntilFinished = eightHoursInMillis - (System.currentTimeMillis() - alarmStartTime)
                     val hours = millisUntilFinished / (1000 * 60 * 60)
                     val minutes = (millisUntilFinished % (1000 * 60 * 60)) / (1000 * 60)
