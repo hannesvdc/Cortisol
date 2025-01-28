@@ -16,7 +16,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import android.widget.Button
 import android.widget.TextView
-import androidx.core.content.edit
+import java.util.Locale
 
 class MainFragment : Fragment() {
 
@@ -24,19 +24,16 @@ class MainFragment : Fragment() {
     private lateinit var fourHourTextview : TextView
     private lateinit var eightHourTextview : TextView
     private lateinit var sharedPreferences : SharedPreferences
-    private lateinit var handler : Handler
+    private lateinit var uiHandler : Handler
 
     @Volatile
     private var runUpdateThread : Boolean = false
     private val fourHoursInMillis : Long = 4 * 60 * 60 * 1000
     private val eightHoursInMillis : Long = 8 * 60 * 60 * 1000
     private val alarmStartTimeKey = "alarm_start_time"
+    private val locale = Locale.US
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) : View? {
-        val sharedPreferencesKey = arguments?.getString("shared_arguments_key")
-        sharedPreferences = requireContext().getSharedPreferences(sharedPreferencesKey, Context.MODE_PRIVATE)
-        handler = Handler(Looper.getMainLooper())
-
         return inflater.inflate(R.layout.treatment, container, false)
     }
 
@@ -44,26 +41,30 @@ class MainFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         // Ask view permissions
-        if (!Settings.canDrawOverlays(context)) {
+        if ( !Settings.canDrawOverlays(context) ) {
             val intent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION)
             intent.data = Uri.parse("package:${context?.packageName}")
-            startActivityForResult(intent, 123) // 123 is an arbitrary request code
+            startActivityForResult(intent, 123)
         }
 
         wakeButton = view.findViewById(R.id.wake_button)
         wakeButton.setOnClickListener {
-            wakeButton.isEnabled = false
             setSystemAlarms()
             startAlarmReadingThreads()
         }
-
         fourHourTextview = view.findViewById(R.id.countdownTextView4)
         eightHourTextview = view.findViewById(R.id.countdownTextView8)
 
-        // This statement is invoked whenever the timers are already running.
-        // This event typically happens when the OS cancels, stops or pauses the app.
+        val sharedPreferencesKey = arguments?.getString("shared_arguments_key")
+        sharedPreferences = requireContext().getSharedPreferences(sharedPreferencesKey, Context.MODE_PRIVATE)
+        uiHandler = Handler(Looper.getMainLooper())
         if ( sharedPreferences.contains(alarmStartTimeKey) ) {
-            startAlarmReadingThreads()
+            val timeSinceStartAlarms = System.currentTimeMillis() - sharedPreferences.getLong(alarmStartTimeKey, 0L)
+            if ( timeSinceStartAlarms > eightHoursInMillis ) {
+                resetFragment()
+            } else {
+                startAlarmReadingThreads()
+            }
         }
     }
 
@@ -71,14 +72,10 @@ class MainFragment : Fragment() {
      * Function that is called when both alarms have finished. This function cleans up the
      * fragment and makes it ready for a new day.
      */
-    fun resetView() {
+    fun resetFragment() {
         runUpdateThread = false
         wakeButton.isEnabled = true
-
-        sharedPreferences.edit {
-            remove("alarm_start_time")
-            apply()
-        }
+        sharedPreferences.edit().remove(alarmStartTimeKey).apply()
     }
 
     /**
@@ -86,12 +83,9 @@ class MainFragment : Fragment() {
      */
     private fun setSystemAlarms() {
         val currentTime = System.currentTimeMillis()
-        sharedPreferences.edit {
-            putLong(alarmStartTimeKey, currentTime)
-            apply()
-        }
         val triggerTime4Hour = currentTime + fourHoursInMillis
         val triggerTime8Hour = currentTime + eightHoursInMillis
+        sharedPreferences.edit().putLong(alarmStartTimeKey, currentTime).apply()
 
         // Set the Alarms using alarmManager and pendingIntents
         val alarmManager = requireContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager
@@ -112,7 +106,9 @@ class MainFragment : Fragment() {
      * textviews with the time left in the threads.
      */
     private fun startAlarmReadingThreads() {
+        wakeButton.isEnabled = false
         runUpdateThread = true
+
         val updateViewsThread = Thread {
             while ( runUpdateThread ) {
                 try {
@@ -125,20 +121,17 @@ class MainFragment : Fragment() {
                     val minutes = (millisUntilFinished % (1000 * 60 * 60)) / (1000 * 60)
                     val seconds = (millisUntilFinished % (1000 * 60)) / 1000
 
-                    var fourHourText : String
-                    var eightHourText : String
-                    if ( millisUntilFinished < 0L ) {
-                        fourHourText = "4-Hour Alarm has Passed"
-                        eightHourText = "8-Hour Alarm has Passed"
-                    } else if ( millisUntilFinished < fourHoursInMillis ) {
-                        fourHourText = "4-Hour Alarm has Passed"
-                        eightHourText = String.format("%02d:%02d:%02d", hours, minutes, seconds)
-                    } else {
-                        fourHourText = String.format("%02d:%02d:%02d", hours - 4, minutes, seconds)
-                        eightHourText = String.format("%02d:%02d:%02d", hours, minutes, seconds)
+                    // Display the remaining time on the textview
+                    var fourHourText = "4-Hour Alarm has Passed"
+                    var eightHourText = "8-Hour Alarm has Passed"
+                    if ( millisUntilFinished < eightHoursInMillis ) {
+                        eightHourText = String.format(locale, "%02d:%02d:%02d", hours, minutes, seconds)
+                        if ( millisUntilFinished in 1..<fourHoursInMillis ) {
+                            fourHourText = String.format(locale, "%02d:%02d:%02d", hours - 4, minutes, seconds)
+                        }
                     }
 
-                    handler.post {
+                    uiHandler.post {
                         fourHourTextview.text = fourHourText
                         eightHourTextview.text = eightHourText
                     }
@@ -148,9 +141,9 @@ class MainFragment : Fragment() {
             }
 
             // Post a fixed message when the thread stops running
-            handler.post {
-                fourHourTextview.text = "04:00:00"
-                eightHourTextview.text = "08:00:00"
+            uiHandler.post {
+                fourHourTextview.text = String.format(locale, "%02d:%02d:%02d", 4, 0, 0)
+                eightHourTextview.text = String.format(locale, "%02d:%02d:%02d", 8, 0, 0)
             }
         }
         updateViewsThread.start()

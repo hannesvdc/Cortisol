@@ -28,14 +28,13 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // Request all necessary permissions using pop-up windows
         requestPostNotification()
 
-        // Instantiate the main fragment and setup a BroadcastManager for the AlarmReceiver
+        // Instantiate the main fragment and setup a BroadcastManager for our AlarmReceiver
         mainFragment = MainFragment()
         val receiver = object : BroadcastReceiver() {
             override fun onReceive(context: Context, intent: Intent?) {
-                mainFragment.resetView()
+                mainFragment.resetFragment()
             }
         }
         val filter = IntentFilter("com.hannesvdc.cortisol.RESET_VIEWS")
@@ -57,8 +56,8 @@ class MainActivity : AppCompatActivity() {
      */
     private fun loadFragment(fragment: Fragment) {
         supportFragmentManager.beginTransaction()
-            .replace(R.id.fragment_container, fragment) // Replace current fragment
-            .addToBackStack(null) // Add transaction to the back stack (optional for navigation)
+            .replace(R.id.fragment_container, fragment)
+            .addToBackStack(null)
             .commit()
     }
 
@@ -67,17 +66,14 @@ class MainActivity : AppCompatActivity() {
      * Called from SetupFragment or onCreate.
      */
     fun navigateToMainFragment(treatmentPlan: Bundle) {
-        // Store the new preferences first
         if ( !treatmentPlanFile.exists() ) {
             storeTreatmentPlan(treatmentPlan)
         }
 
-        // Gather all arguments in a single bundle
         val argumentsBundle = Bundle()
         argumentsBundle.putBundle("treatment_plan", treatmentPlan)
         argumentsBundle.putString("shared_preferences_key", sharedPreferencesKey)
 
-        // Load the main fragment
         mainFragment.arguments = argumentsBundle
         loadFragment(mainFragment)
     }
@@ -111,7 +107,7 @@ class MainActivity : AppCompatActivity() {
         } catch (e: Exception) {
             Bundle()
         } finally {
-            parcel.recycle() // Clean up the Parcel
+            parcel.recycle()
         }
     }
 
@@ -121,13 +117,13 @@ class MainActivity : AppCompatActivity() {
     private fun storeTreatmentPlan(treatmentPlan : Bundle) {
         val parcel = Parcel.obtain()
         try {
-            treatmentPlan.writeToParcel(parcel, 0) // Write the Bundle to the Parcel
-            val data = parcel.marshall() // Convert the Parcel to a byte array
-            treatmentPlanFile.writeBytes(data) // Write the byte array to the file
+            treatmentPlan.writeToParcel(parcel, 0)
+            val data = parcel.marshall()
+            treatmentPlanFile.writeBytes(data)
         } catch (e: Exception) {
             e.printStackTrace()
         } finally {
-            parcel.recycle() // Clean up the Parcel
+            parcel.recycle()
         }
     }
 
