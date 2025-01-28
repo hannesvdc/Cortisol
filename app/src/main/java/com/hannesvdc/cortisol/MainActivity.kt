@@ -20,7 +20,8 @@ import java.io.File
 class MainActivity : AppCompatActivity() {
 
     private lateinit var mainFragment : MainFragment
-    private lateinit var preferencesFile : File
+    private lateinit var treatmentPlanFile : File
+    private val sharedPreferencesKey = "TreatmentAlarms"
 
     @SuppressLint("UnspecifiedRegisterReceiverFlag", "InlinedApi")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,10 +42,10 @@ class MainActivity : AppCompatActivity() {
         LocalBroadcastManager.getInstance(applicationContext).registerReceiver(receiver, filter)
 
         // Load existing preferences from file if they exist, otherwise start the SetupFragment
-        preferencesFile = File(applicationContext.filesDir, "preferences.json")
-        if ( preferencesFile.exists() ) {
-            val preferences = loadPreferences()
-            navigateToMainFragment(preferences)
+        treatmentPlanFile = File(applicationContext.filesDir, "treatmentplan.json")
+        if ( treatmentPlanFile.exists() ) {
+            val treatments = loadTreatmentPlan()
+            navigateToMainFragment(treatments)
         } else if (savedInstanceState == null ) {
             loadFragment(SetupFragment())
         }
@@ -65,14 +66,19 @@ class MainActivity : AppCompatActivity() {
      * Function to handle navigation from SetupFragment to MainFragment.
      * Called from SetupFragment or onCreate.
      */
-    fun navigateToMainFragment(preferences: Bundle) {
+    fun navigateToMainFragment(treatmentPlan: Bundle) {
         // Store the new preferences first
-        if ( !preferencesFile.exists() ) {
-            storePreferences(preferences)
+        if ( !treatmentPlanFile.exists() ) {
+            storeTreatmentPlan(treatmentPlan)
         }
 
-        // Then display the main fragment
-        mainFragment.arguments = preferences
+        // Gather all arguments in a single bundle
+        val argumentsBundle = Bundle()
+        argumentsBundle.putBundle("treatment_plan", treatmentPlan)
+        argumentsBundle.putString("shared_preferences_key", sharedPreferencesKey)
+
+        // Load the main fragment
+        mainFragment.arguments = argumentsBundle
         loadFragment(mainFragment)
     }
 
@@ -93,14 +99,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     /**
-     * Fynction to load stored user-preferences such as a compilation of their treatment plan.
-     *
-     * TODO: These are not as much 'preferences' as they are the foundation of this app
+     * Function to load stored user-preferences such as a compilation of their treatment plan.
      */
-    private fun loadPreferences() : Bundle {
+    private fun loadTreatmentPlan() : Bundle {
         val parcel = Parcel.obtain()
         return try {
-            val data = preferencesFile.readBytes()
+            val data = treatmentPlanFile.readBytes()
             parcel.unmarshall(data, 0, data.size)
             parcel.setDataPosition(0)
             Bundle.CREATOR.createFromParcel(parcel)
@@ -112,16 +116,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     /**
-     * Fynction to store user treatment preferences to file.
-     *
-     * TODO: These are not as much 'preferences' as they are the foundation of this app
-     */
-    private fun storePreferences(preferences : Bundle) {
+     * Function to store user treatment preferences to file.
+     **/
+    private fun storeTreatmentPlan(treatmentPlan : Bundle) {
         val parcel = Parcel.obtain()
         try {
-            preferences.writeToParcel(parcel, 0) // Write the Bundle to the Parcel
+            treatmentPlan.writeToParcel(parcel, 0) // Write the Bundle to the Parcel
             val data = parcel.marshall() // Convert the Parcel to a byte array
-            preferencesFile.writeBytes(data) // Write the byte array to the file
+            treatmentPlanFile.writeBytes(data) // Write the byte array to the file
         } catch (e: Exception) {
             e.printStackTrace()
         } finally {
