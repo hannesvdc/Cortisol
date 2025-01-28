@@ -33,12 +33,9 @@ class MainFragment : Fragment() {
 
         // Ask view permissions
         if (!Settings.canDrawOverlays(context)) {
-            Log.i("Permissions", "Asking permission to draw overlays")
             val intent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION)
             intent.data = Uri.parse("package:${context?.packageName}")
             startActivityForResult(intent, 123) // 123 is an arbitrary request code
-        } else {
-            Log.i("Permissions", "Apparently we can draw overlays")
         }
 
         wakeButton = view.findViewById(R.id.wake_button)
@@ -78,8 +75,6 @@ class MainFragment : Fragment() {
             triggerTime8Hour,
             pendingIntent8Hour
         )
-
-        Log.i("Alarms", "System Alarms have been set")
     }
 
     private fun setCountdownTimers() {

@@ -34,12 +34,8 @@ class AlarmReceiver : BroadcastReceiver() {
         } else {
             "Please take 2.5 mg Hydrocortisol"
         }
-        Log.i("Alarm", "System alarm has passed: $alarmType")
 
-        // Show Notification
         showNotification(context, message)
-
-        // Show Floating View (if permission granted)
         if (Settings.canDrawOverlays(context)) {
             showFloatingView(context, message)
         }
@@ -52,10 +48,8 @@ class AlarmReceiver : BroadcastReceiver() {
 
     @SuppressLint("InflateParams")
     private fun showFloatingView(context: Context, message : String) {
-        // Initialize WindowManager
         windowManager = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
 
-        // Create Floating View
         floatingView = LayoutInflater.from(context).inflate(R.layout.floating_view, null)
         val floatingTextbox : TextView = floatingView!!.findViewById(R.id.floatingText)
         floatingTextbox.text = message
@@ -68,10 +62,8 @@ class AlarmReceiver : BroadcastReceiver() {
             android.graphics.PixelFormat.TRANSLUCENT
         )
 
-        // Add floating view to window
         windowManager?.addView(floatingView, params)
 
-        // Handle close button in floating view
         val closeButton: Button = floatingView!!.findViewById(R.id.closeButton)
         closeButton.setOnClickListener {
             isVibrating = false
@@ -79,7 +71,6 @@ class AlarmReceiver : BroadcastReceiver() {
             windowManager?.removeView(floatingView)
         }
 
-        // Start playing sound and vibration continuously
         isVibrating = true
         startContinuousVibration(context)
     }
@@ -90,15 +81,13 @@ class AlarmReceiver : BroadcastReceiver() {
         vibrateThread = Thread {
             while (isVibrating) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    // For devices running Android Oreo and above
                     val vibrationEffect = VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE)
                     vibrator.vibrate(vibrationEffect)
                 } else {
-                    // For older devices
                     vibrator.vibrate(500)
                 }
                 try {
-                    Thread.sleep(1000) // Vibrate every 1 second (adjustable)
+                    Thread.sleep(1000)
                 } catch (e: InterruptedException) {
                     e.printStackTrace()
                 }
@@ -109,28 +98,24 @@ class AlarmReceiver : BroadcastReceiver() {
 
     private fun stopVibration(context : Context) {
         val vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-        vibrator.cancel() // Stop vibration
+        vibrator.cancel()
     }
 
     private fun showNotification(context: Context, message : String) {
         val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
-        // Create notification channel for Android 8.0 and above
         val channel = NotificationChannel(
             "alarm_channel", "Alarm Notifications",
             NotificationManager.IMPORTANCE_HIGH
         )
         notificationManager.createNotificationChannel(channel)
 
-        // Build notification
         val notification = NotificationCompat.Builder(context, "alarm_channel")
             .setContentTitle("Alarm Triggered")
             .setContentText(message)
             .setSmallIcon(android.R.drawable.ic_dialog_info)  // Use a built-in Android icon for now
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .build()
-
-        // Show notification
         notificationManager.notify(1, notification)
     }
 }

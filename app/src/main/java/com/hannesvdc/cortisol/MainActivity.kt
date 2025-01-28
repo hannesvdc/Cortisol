@@ -10,7 +10,6 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.os.Parcel
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -44,7 +43,6 @@ class MainActivity : AppCompatActivity() {
         // Load existing preferences from file if they exist, otherwise start the SetupFragment
         preferencesFile = File(applicationContext.filesDir, "preferences.json")
         if ( preferencesFile.exists() ) {
-            Log.i("Preferences", "Preferences file exists, moving to the main fragment")
             val preferences = loadPreferences()
             navigateToMainFragment(preferences)
         } else if (savedInstanceState == null ) {
@@ -85,7 +83,6 @@ class MainActivity : AppCompatActivity() {
     private fun requestPostNotification() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (ContextCompat.checkSelfPermission(applicationContext, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
-                Log.i("Permissions", "Asking Post-notifications permissions")
                 ActivityCompat.requestPermissions(
                     this,
                     arrayOf(Manifest.permission.POST_NOTIFICATIONS),
@@ -108,7 +105,6 @@ class MainActivity : AppCompatActivity() {
             parcel.setDataPosition(0)
             Bundle.CREATOR.createFromParcel(parcel)
         } catch (e: Exception) {
-            Log.i("Loading", "Preferences file could not be loaded")
             Bundle()
         } finally {
             parcel.recycle() // Clean up the Parcel
@@ -126,10 +122,8 @@ class MainActivity : AppCompatActivity() {
             preferences.writeToParcel(parcel, 0) // Write the Bundle to the Parcel
             val data = parcel.marshall() // Convert the Parcel to a byte array
             preferencesFile.writeBytes(data) // Write the byte array to the file
-            println("Bundle saved successfully!")
         } catch (e: Exception) {
             e.printStackTrace()
-            println("Failed to save Bundle.")
         } finally {
             parcel.recycle() // Clean up the Parcel
         }
