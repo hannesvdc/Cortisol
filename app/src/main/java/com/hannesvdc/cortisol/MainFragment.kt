@@ -47,6 +47,7 @@ class MainFragment : Fragment() {
             startActivityForResult(intent, 123)
         }
 
+        // Set up the UI Components
         wakeButton = view.findViewById(R.id.wake_button)
         wakeButton.setOnClickListener {
             setSystemAlarms()
@@ -55,6 +56,7 @@ class MainFragment : Fragment() {
         fourHourTextview = view.findViewById(R.id.countdownTextView4)
         eightHourTextview = view.findViewById(R.id.countdownTextView8)
 
+        // Logic of the Fragment
         val fromSetupFragment = arguments?.getBoolean("from_setup_fragment")
         val sharedPreferencesKey = arguments?.getString("shared_arguments_key")
         sharedPreferences = requireContext().getSharedPreferences(sharedPreferencesKey, Context.MODE_PRIVATE)
