@@ -3,6 +3,7 @@ package com.hannesvdc.cortisol
 import android.annotation.SuppressLint
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -28,6 +29,13 @@ class AlarmReceiver : BroadcastReceiver() {
     private var vibrateThread: Thread? = null
 
     override fun onReceive(context: Context, intent: Intent?) {
+        if (intent?.action == "STOP_VIBRATION") {
+            isVibrating = false
+            windowManager?.removeView(floatingView)
+            stopVibration(context) // Stop vibration when button is pressed
+            return
+        }
+
         val alarmType = intent?.getStringExtra("ALARM_TYPE") ?: "Unknown alarm"
         val message : String = if (alarmType == "4-hour alarm") {
             "Please take 5 mg Hydrocortisol"
@@ -96,9 +104,11 @@ class AlarmReceiver : BroadcastReceiver() {
         vibrateThread?.start()
     }
 
-    private fun stopVibration(context : Context) {
+    private fun stopVibration(context: Context) {
         val vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
         vibrator.cancel()
+        vibrateThread?.interrupt()
+        vibrateThread = null
     }
 
     private fun showNotification(context: Context, message : String) {
@@ -110,11 +120,21 @@ class AlarmReceiver : BroadcastReceiver() {
         )
         notificationManager.createNotificationChannel(channel)
 
+        // Intent to stop vibration
+        val stopIntent = Intent(context, AlarmReceiver::class.java).apply {
+            action = "STOP_VIBRATION"
+        }
+        val stopPendingIntent = PendingIntent.getBroadcast(
+            context, 0, stopIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+
         val notification = NotificationCompat.Builder(context, "alarm_channel")
-            .setContentTitle("Alarm Triggered")
+            .setContentTitle("Cortisol Alarm")
             .setContentText(message)
-            .setSmallIcon(android.R.drawable.ic_dialog_info)  // Use a built-in Android icon for now
+            .setSmallIcon(android.R.drawable.ic_dialog_info)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .addAction(android.R.drawable.ic_delete, "Stop", stopPendingIntent)
+            .setAutoCancel(true)
             .build()
         notificationManager.notify(1, notification)
     }
