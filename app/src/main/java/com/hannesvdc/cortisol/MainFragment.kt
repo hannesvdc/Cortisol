@@ -28,8 +28,8 @@ class MainFragment : Fragment() {
 
     @Volatile
     private var runUpdateThread : Boolean = false
-    private val fourHoursInMillis : Long = 4 * 60 * 60 * 1000
-    private val eightHoursInMillis : Long = 8 * 60 * 60 * 1000
+    private val fourHoursInMillis : Long = 10 * 1000 //4 * 60 * 60 * 1000
+    private val eightHoursInMillis : Long = 20 * 1000 //8 * 60 * 60 * 1000
     private val alarmStartTimeKey = "alarm_start_time"
     private val locale = Locale.US
 

@@ -8,6 +8,9 @@
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK"/>
 
     <application
         android:allowBackup="true"
@@ -35,6 +38,11 @@
                 <action android:name="STOP_VIBRATION"/>
             </intent-filter>
         </receiver>
+
+        <service
+            android:name=".VibrationService"
+            android:foregroundServiceType="mediaPlayback"
+            android:exported="false"/>
     </application>
 
 </manifest>
