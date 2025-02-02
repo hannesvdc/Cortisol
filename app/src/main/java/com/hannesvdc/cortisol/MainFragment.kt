@@ -95,10 +95,10 @@ class MainFragment : Fragment() {
         // Set the Alarms using alarmManager and pendingIntents
         val alarmManager = requireContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val intent4Hour = Intent(requireContext(), AlarmReceiver::class.java).apply {
-            putExtra("ALARM_TYPE", "4-hour alarm") // Add an extra to distinguish the alarm
+            putExtra("ALARM_TYPE", "4-hour alarm")
         }
         val intent8Hour = Intent(requireContext(), AlarmReceiver::class.java).apply {
-            putExtra("ALARM_TYPE", "8-hour alarm") // Add an extra to distinguish the alarm
+            putExtra("ALARM_TYPE", "8-hour alarm")
         }
         val pendingIntent4Hour = PendingIntent.getBroadcast(context, 0, intent4Hour, PendingIntent.FLAG_IMMUTABLE)
         val pendingIntent8Hour = PendingIntent.getBroadcast(context, 1, intent8Hour, PendingIntent.FLAG_IMMUTABLE)
@@ -127,8 +127,8 @@ class MainFragment : Fragment() {
                     val seconds = (millisUntilFinished % (1000 * 60)) / 1000
 
                     // Display the remaining time on the textview
-                    var fourHourText = "4-Hour Alarm has Passed"
-                    var eightHourText = "8-Hour Alarm has Passed"
+                    var fourHourText = "Alarm has Passed"
+                    var eightHourText = "Alarm has Passed"
                     if ( millisUntilFinished < eightHoursInMillis ) {
                         eightHourText = String.format(locale, "%02d:%02d:%02d", hours, minutes, seconds)
                         if ( millisUntilFinished >= fourHoursInMillis ) {

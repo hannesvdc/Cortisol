@@ -9,19 +9,20 @@ import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
-import android.os.Parcel
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import org.json.JSONObject
 import java.io.File
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var mainFragment : MainFragment
-    private lateinit var treatmentPlanFile : File
     private val sharedPreferencesKey = "TreatmentAlarms"
+    private val treatmentPlanKey = "TreatmentPlan"
 
     @SuppressLint("UnspecifiedRegisterReceiverFlag", "InlinedApi")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,13 +41,14 @@ class MainActivity : AppCompatActivity() {
         val filter = IntentFilter("com.hannesvdc.cortisol.RESET_VIEWS")
         LocalBroadcastManager.getInstance(applicationContext).registerReceiver(receiver, filter)
 
-        // Load existing treatment plan from file if they exist, otherwise run the SetupFragment
-        treatmentPlanFile = File(applicationContext.filesDir, "treatmentplan.json")
-        if ( treatmentPlanFile.exists() ) {
-            val treatments = loadTreatmentPlan()
-            navigateToMainFragment(treatments, false)
+        // Check if a treatment sharedPreferences exists. If so, proceed to the main fragment, otherwise do setup
+        if ( File(applicationContext.filesDir.parent,  "shared_prefs/$treatmentPlanKey.xml").exists() ) {
+            Log.i("Activity", "File exists")
+            val treatmentPlan = applicationContext.getSharedPreferences(treatmentPlanKey, Context.MODE_PRIVATE)
+            val diseases = stringToBundle(treatmentPlan.getString("Diseases", ""))
+            navigateToMainFragment(diseases, false)
         } else if (savedInstanceState == null ) {
-            loadFragment(SetupFragment())
+            loadFragment(SetupFragment(treatmentPlanKey))
         }
     }
 
@@ -66,10 +68,6 @@ class MainActivity : AppCompatActivity() {
      * Called from SetupFragment or onCreate.
      */
     fun navigateToMainFragment(treatmentPlan: Bundle, fromSetupFragment : Boolean) {
-        if ( !treatmentPlanFile.exists() ) {
-            storeTreatmentPlan(treatmentPlan)
-        }
-
         val argumentsBundle = Bundle()
         argumentsBundle.putBundle("treatment_plan", treatmentPlan)
         argumentsBundle.putString("shared_preferences_key", sharedPreferencesKey)
@@ -96,36 +94,25 @@ class MainActivity : AppCompatActivity() {
     }
 
     /**
-     * Function to load stored user-preferences such as a compilation of their treatment plan.
+     * Simple function that converts the treatmentPlan stored as a string to
+     * a Bundle. The treatmentPlan comes from SharedPreferences, which does not
+     * store Bundles natively.
      */
-    private fun loadTreatmentPlan() : Bundle {
-        val parcel = Parcel.obtain()
-        return try {
-            val data = treatmentPlanFile.readBytes()
-            parcel.unmarshall(data, 0, data.size)
-            parcel.setDataPosition(0)
-            Bundle.CREATOR.createFromParcel(parcel)
-        } catch (e: Exception) {
-            Bundle()
-        } finally {
-            parcel.recycle()
-        }
-    }
+    private fun stringToBundle(plan : String?) : Bundle {
+        val bundle = Bundle()
+        val jsonObject = plan?.let { JSONObject(it) }
 
-    /**
-     * Function to store user treatment preferences to file.
-     **/
-    private fun storeTreatmentPlan(treatmentPlan : Bundle) {
-        val parcel = Parcel.obtain()
-        try {
-            treatmentPlan.writeToParcel(parcel, 0)
-            val data = parcel.marshall()
-            treatmentPlanFile.writeBytes(data)
-        } catch (e: Exception) {
-            e.printStackTrace()
-        } finally {
-            parcel.recycle()
+        if (jsonObject != null) {
+            for (key in jsonObject.keys()) {
+                when (val value = jsonObject.get(key)) {
+                    is String -> bundle.putString(key, value)
+                    is Int -> bundle.putInt(key, value)
+                    is Boolean -> bundle.putBoolean(key, value)
+                    is Double -> bundle.putDouble(key, value)
+                    is Long -> bundle.putLong(key, value)
+                }
+            }
         }
+        return bundle
     }
-
 }
