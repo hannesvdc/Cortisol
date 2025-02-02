@@ -109,7 +109,7 @@ class VibrationService : Service() {
         return NotificationCompat.Builder(this, channelId)
             .setContentTitle("Cortisol Alarm")
             .setContentText(message)
-            .setSmallIcon(android.R.drawable.ic_dialog_info)
+            .setSmallIcon(R.drawable.ic_pill)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .addAction(android.R.drawable.ic_delete, "Stop", stopPendingIntent)
             .setAutoCancel(true)
