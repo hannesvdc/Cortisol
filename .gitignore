@@ -40,4 +40,3 @@
 **/.externalNativeBuild
 **/.cxx
 **/local.properties
-android/.idea/*
