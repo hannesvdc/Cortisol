@@ -9,7 +9,7 @@ import SwiftUI
 
 struct SetupView: View {
     @State private var selectedDiseases: [String: Bool] = [
-        "Addison": false
+        "Addison's Disease": false
     ]
 
     @AppStorage("hasCompletedSetup") var hasCompletedSetup: Bool = false

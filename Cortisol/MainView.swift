@@ -12,13 +12,13 @@ struct MainView: View {
 
     var body: some View {
         VStack(spacing: 40) {
-            Text("Your Treatment Timers")
+            Text("Your Daily Treatment Plan")
                 .font(.title)
                 .bold()
                 .padding(.top, 20)
 
             VStack(spacing: 10) {
-                Text("4 Hour Dose Timer")
+                Text("4 Hour Timer")
                     .font(.headline)
 
                 Text(viewModel.fourHourText)
@@ -27,7 +27,7 @@ struct MainView: View {
             }
 
             VStack(spacing: 10) {
-                Text("8 Hour Dose Timer")
+                Text("8 Hour Timer")
                     .font(.headline)
 
                 Text(viewModel.eightHourText)
