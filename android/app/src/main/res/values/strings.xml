@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Cortisol</string>
+    <string name="intro_text">Please Select your Illnesses</string>
+    <string name="addison_check">Addison\'s Disease</string>
+    <string name="second_check">Second Disease</string>
+    <string name="intro_continue">Continue</string>
+    <string name="treatment_header">Your Daily Treatment Plan</string>
+    <string name="addison_4hour">Time Until 5 mg Hydrocortisol:</string>
+    <string name="addison_8hour">Time Until 2.5 mg Hydrocortisol:</string>
+    <string name="popup_text">Please Take a Hydrocortisol Pill</string>
+    <string name="close_text">Close</string>
+    <string name="wake_text">I Woke Up</string>
+</resources>

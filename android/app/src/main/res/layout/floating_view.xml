@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@android:color/white"
+    android:padding="10dp"
+    android:elevation="10dp">
+
+    <!-- Text to display in the floating view -->
+    <TextView
+        android:id="@+id/floatingText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/popup_text"
+        android:textSize="16sp"
+        android:textColor="#000000"
+        android:layout_marginBottom="10dp" />
+
+    <!-- Close button to remove the floating view -->
+    <Button
+        android:id="@+id/closeButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/close_text"
+        android:layout_gravity="center"/>
+</LinearLayout>
