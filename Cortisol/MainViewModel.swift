@@ -18,9 +18,12 @@ class MainViewModel: ObservableObject {
     @Published var showAlert: Bool = false
     @Published var alertMessage: String = ""
 
-    private var timer: Timer?
+    private var fourHourTimer: Timer?
+    private var eightHourTimer: Timer?
+    
     private let fourHours: TimeInterval = 4 * 60 * 60
     private let eightHours: TimeInterval = 8 * 60 * 60
+    
     private let alarmStartTimeKey = "alarm_start_time"
 
     init() {
@@ -29,10 +32,13 @@ class MainViewModel: ObservableObject {
     }
 
     func resetView() {
-        timer?.invalidate()
+        fourHourTimer?.invalidate()
+        eightHourTimer?.invalidate()
+
         isWakeButtonEnabled = true
         fourHourText = "04:00:00"
         eightHourText = "08:00:00"
+
         UserDefaults.standard.removeObject(forKey: alarmStartTimeKey)
 
         shouldReset = true
@@ -47,20 +53,24 @@ class MainViewModel: ObservableObject {
         isWakeButtonEnabled = false
 
         scheduleNotifications()
-        startTimer()
+        startFourHourTimer()
+        startEightHourTimer()
     }
 
-    private func startTimer() {
-        timer?.invalidate()
+    private func startFourHourTimer() {
+        fourHourTimer?.invalidate()
+        
+        guard let alarmStart = UserDefaults.standard.value(forKey: alarmStartTimeKey) as? Double else { return }
 
-        timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
-            guard let alarmStart = UserDefaults.standard.value(forKey: self.alarmStartTimeKey) as? Double else { return }
-
+        fourHourTimer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] timer in
+            guard let self = self else { return }
+            
             let elapsed = Date().timeIntervalSince1970 - alarmStart
-            let remaining = max(self.eightHours - elapsed, 0)
+            let remaining = max(self.fourHours - elapsed, 0)
 
             if remaining <= 0 {
-                self.triggerReset("8 hour timer ended. Please take 2.5mg Hydrocortisol.")
+                self.fourHourText = "Alarm has Passed"
+                timer.invalidate()
                 return
             }
 
@@ -68,11 +78,30 @@ class MainViewModel: ObservableObject {
             let minutes = (Int(remaining) % 3600) / 60
             let seconds = Int(remaining) % 60
 
-            if elapsed < self.fourHours {
-                self.fourHourText = String(format: "%02d:%02d:%02d", 4 - hours, 59 - minutes, 59 - seconds)
-            } else {
-                self.fourHourText = "Alarm has Passed"
+            self.fourHourText = String(format: "%02d:%02d:%02d", hours, minutes, seconds)
+        }
+    }
+
+    private func startEightHourTimer() {
+        eightHourTimer?.invalidate()
+        
+        guard let alarmStart = UserDefaults.standard.value(forKey: alarmStartTimeKey) as? Double else { return }
+
+        eightHourTimer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] timer in
+            guard let self = self else { return }
+
+            let elapsed = Date().timeIntervalSince1970 - alarmStart
+            let remaining = max(self.eightHours - elapsed, 0)
+
+            if remaining <= 0 {
+                timer.invalidate()
+                self.triggerReset("8 hour timer ended. Please take 2.5mg Hydrocortisol.")
+                return
             }
+
+            let hours = Int(remaining) / 3600
+            let minutes = (Int(remaining) % 3600) / 60
+            let seconds = Int(remaining) % 60
 
             self.eightHourText = String(format: "%02d:%02d:%02d", hours, minutes, seconds)
         }
@@ -92,7 +121,8 @@ class MainViewModel: ObservableObject {
                 resetView()
             } else {
                 isWakeButtonEnabled = false
-                startTimer()
+                startFourHourTimer()
+                startEightHourTimer()
             }
         }
     }
