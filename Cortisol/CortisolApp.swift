@@ -9,9 +9,15 @@ import SwiftUI
 
 @main
 struct CortisolApp: App {
+    @AppStorage("hasCompletedSetup") var hasCompletedSetup: Bool = false
+
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            if hasCompletedSetup {
+                MainView()
+            } else {
+                SetupView()
+            }
         }
     }
 }
