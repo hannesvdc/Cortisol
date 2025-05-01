@@ -1,43 +1,43 @@
 # Xcode
-*.xcuserstate
-*.xcworkspace
-*.xcodeproj/*
-!*.xcodeproj/project.pbxproj
-!*.xcodeproj/xcshareddata/
+/ios/*.xcuserstate
+/ios/*.xcworkspace
+/ios/*.xcodeproj/*
+/ios/!*.xcodeproj/project.pbxproj
+/ios/!*.xcodeproj/xcshareddata/
 
 # Derived data and build products
-DerivedData/
-build/
-*.log
+/ios/DerivedData/
+/ios/build/
+/ios/*.log
 
 # SwiftPM
-Packages/
-.swiftpm/
-.build/
+/ios/Packages/
+/ios/.swiftpm/
+/ios/.build/
 
 # CocoaPods
-Pods/
-Podfile.lock
+/ios/Pods/
+/ios/Podfile.lock
 
 # Carthage
-Carthage/Build/
+/ios/Carthage/Build/
 
 # Other
 .DS_Store
 
 # Android Studio
 *.iml
-.gradle
-/local.properties
-/.idea/caches
-/.idea/libraries
-/.idea/modules.xml
-/.idea/workspace.xml
-/.idea/navEditor.xml
-/.idea/assetWizardSettings.xml
-.DS_Store
-/build
-/captures
-.externalNativeBuild
-.cxx
-local.properties
+**/.gradle
+**/local.properties
+**/.idea/caches
+**/.idea/libraries
+**/.idea/modules.xml
+**/.idea/workspace.xml
+**/.idea/navEditor.xml
+**/.idea/assetWizardSettings.xml
+**/build
+**/captures
+**/.externalNativeBuild
+**/.cxx
+**/local.properties
+android/.idea/*
