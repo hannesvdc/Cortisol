@@ -18,7 +18,7 @@ struct MainView: View {
                 .padding(.top, 20)
 
             VStack(spacing: 10) {
-                Text("4 Hour Timer")
+                Text("Time until 5 mg hydrocortisol")
                     .font(.headline)
 
                 Text(viewModel.fourHourText)
@@ -27,7 +27,7 @@ struct MainView: View {
             }
 
             VStack(spacing: 10) {
-                Text("8 Hour Timer")
+                Text("Time until 2.5 mg hydrocortisol")
                     .font(.headline)
 
                 Text(viewModel.eightHourText)
@@ -54,7 +54,7 @@ struct MainView: View {
         }
         .padding()
         .alert(isPresented: $viewModel.showAlert) {
-            Alert(title: Text("Timer Finished"), message: Text(viewModel.alertMessage), dismissButton: .default(Text("OK")))
+            Alert(title: Text("Cortisol Alert"), message: Text(viewModel.alertMessage), dismissButton: .default(Text("OK")))
         }
     }
 }
