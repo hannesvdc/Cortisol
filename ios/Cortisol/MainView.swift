@@ -53,8 +53,8 @@ struct MainView: View {
             .padding(.bottom, 50)
         }
         .padding()
-        .alert(isPresented: $viewModel.showAlert) {
-            Alert(title: Text("Cortisol Alert"), message: Text(viewModel.alertMessage), dismissButton: .default(Text("OK")))
+        .onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)) { _ in
+            viewModel.stopAlarms()
         }
     }
 }

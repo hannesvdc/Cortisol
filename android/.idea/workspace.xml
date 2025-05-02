@@ -1,11 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AndroidLayouts">
+    <shared>
+      <config />
+    </shared>
+  </component>
   <component name="AutoImportSettings">
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="26db5459-2556-4ebb-9a27-7f7d813fa4ef" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../ios/Cortisol/Assets.xcassets/AppIcon.appiconset/ios_icon.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ios/Cortisol/Assets.xcassets/AppIcon.appiconset/Contents.json" beforeDir="false" afterPath="$PROJECT_DIR$/../ios/Cortisol/Assets.xcassets/AppIcon.appiconset/Contents.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ios/Cortisol/MainViewModel.swift" beforeDir="false" afterPath="$PROJECT_DIR$/../ios/Cortisol/MainViewModel.swift" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -42,7 +51,7 @@
     "cidr.known.project.marker": "true",
     "git-widget-placeholder": "main",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "/Users/hannesvdc/Research/Side-Projects/Cortisol/android"
+    "last_opened_file_path": "/Users/hannesvdc/Cortisol/android"
   }
 }]]></component>
   <component name="RunManager">
@@ -128,5 +137,21 @@
       <updated>1746108692369</updated>
     </task>
     <servers />
+  </component>
+  <component name="play_dynamic_filters_status">
+    <option name="appIdToCheckInfo">
+      <map>
+        <entry key="com.hannesvdc.cortisol">
+          <value>
+            <CheckInfo lastCheckTimestamp="1746185731036" />
+          </value>
+        </entry>
+        <entry key="com.hannesvdc.cortisol.test">
+          <value>
+            <CheckInfo lastCheckTimestamp="1746185731036" />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
 </project>
