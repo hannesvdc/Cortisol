@@ -132,7 +132,6 @@ class MainViewModel: NSObject, ObservableObject, UNUserNotificationCenterDelegat
     }
     
     func stopAlarms() {
-        print("Notification Spamming Stopped")
         UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
     }
     
@@ -142,7 +141,7 @@ class MainViewModel: NSObject, ObservableObject, UNUserNotificationCenterDelegat
 
         for minuteOffset in 0..<60 {
             let content = UNMutableNotificationContent()
-            content.title = "Cortisol Reminder"
+            content.title = "Medication Reminder"
             content.body = message
             content.sound = UNNotificationSound.default
 

@@ -24,6 +24,7 @@ struct MainView: View {
                 Text(viewModel.fourHourText)
                     .font(.system(size: 48, weight: .bold))
                     .foregroundColor(.red)
+                    .multilineTextAlignment(.center)
             }
 
             VStack(spacing: 10) {
@@ -33,6 +34,7 @@ struct MainView: View {
                 Text(viewModel.eightHourText)
                     .font(.system(size: 48, weight: .bold))
                     .foregroundColor(.red)
+                    .multilineTextAlignment(.center)
             }
 
             Spacer()
