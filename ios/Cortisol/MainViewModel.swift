@@ -14,7 +14,6 @@ class MainViewModel: NSObject, ObservableObject, UNUserNotificationCenterDelegat
     @Published var fourHourText: String = "04:00:00"
     @Published var eightHourText: String = "08:00:00"
     @Published var isWakeButtonEnabled: Bool = true
-    @Published var shouldReset: Bool = false
 
     private var fourHourTimer: Timer?
     private var eightHourTimer: Timer?
@@ -42,11 +41,6 @@ class MainViewModel: NSObject, ObservableObject, UNUserNotificationCenterDelegat
         eightHourText = "08:00:00"
 
         UserDefaults.standard.removeObject(forKey: alarmStartTimeKey)
-
-        shouldReset = true
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-            self.shouldReset = false
-        }
     }
 
     func startAlarms() {
@@ -97,7 +91,7 @@ class MainViewModel: NSObject, ObservableObject, UNUserNotificationCenterDelegat
 
             if remaining <= 0 {
                 timer.invalidate()
-                self.triggerReset()
+                self.resetView()
                 self.startRepeatingNotifications(message: "Please take 2.5 mg Hydrocortisol")
                 return
             }
@@ -108,10 +102,6 @@ class MainViewModel: NSObject, ObservableObject, UNUserNotificationCenterDelegat
 
             self.eightHourText = String(format: "%02d:%02d:%02d", hours, minutes, seconds)
         }
-    }
-    
-    private func triggerReset() {
-        resetView()
     }
     
     private func checkExistingAlarms() {
