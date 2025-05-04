@@ -11,8 +11,8 @@ import UserNotifications
 import SwiftUI
 
 class MainViewModel: NSObject, ObservableObject, UNUserNotificationCenterDelegate {
-    @Published var fourHourText: String = "04:00:00"
-    @Published var eightHourText: String = "08:00:00"
+    @Published var fourHourText: String = "4:00:00"
+    @Published var eightHourText: String = "8:00:00"
     @Published var isWakeButtonEnabled: Bool = true
 
     private var fourHourTimer: Timer?
@@ -37,8 +37,8 @@ class MainViewModel: NSObject, ObservableObject, UNUserNotificationCenterDelegat
         eightHourTimer?.invalidate()
 
         isWakeButtonEnabled = true
-        fourHourText = "04:00:00"
-        eightHourText = "08:00:00"
+        fourHourText = "4:00:00"
+        eightHourText = "8:00:00"
 
         UserDefaults.standard.removeObject(forKey: alarmStartTimeKey)
     }
