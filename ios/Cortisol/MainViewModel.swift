@@ -135,7 +135,7 @@ class MainViewModel: NSObject, ObservableObject, UNUserNotificationCenterDelegat
             content.body = message
             content.sound = UNNotificationSound.default
 
-            let interval = max(1, minuteOffset * 30)
+            let interval = max(1, minuteOffset * 60)
             let trigger = UNTimeIntervalNotificationTrigger(timeInterval: TimeInterval(interval), repeats: false)
 
             let request = UNNotificationRequest(identifier: "repeatingAlarm_\(minuteOffset)", content: content, trigger: trigger)
